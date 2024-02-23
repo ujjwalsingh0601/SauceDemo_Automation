@@ -47,21 +47,7 @@ namespace SauceDemo.PageObjectModel.SauceDemoPageObjects
             _username.SendKeys(username);
             _password.SendKeys(password);
             _loginBtn.Click();
-            Console.WriteLine("Login successfully to SauceDemo site");
+            Console.WriteLine("Login into SauceDemo site");
         }
-
-        /* public bool IsDashboardTextPresentAfterLogin(string text)
-         {
-             *//*string.Format(dasboardtextXpath, text, How.XPath);
-             return true;*//*
-             // Construct dynamic XPath for dashboard text based on the provided text
-             string dynamicXPath = string.Format(dasboardtextXpath, text);
-
-             // Find the dashboard text element using the dynamic XPath
-             IWebElement element = _driver.FindElement(By.XPath(dynamicXPath));
-
-             // Return true if the element is found, false otherwise
-             return element != null;
-         }*/
     }
 }

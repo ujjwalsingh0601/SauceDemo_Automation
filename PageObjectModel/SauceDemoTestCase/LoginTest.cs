@@ -7,22 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SauceDemo.PageObjectModel.SauceDemoPageObjects;
+using SauceDemo.PageObjectModel.CustomCommands;
 
 namespace SauceDemo.PageObjectModel.SauceDemoTestCase
 {
     public class LoginTest : Driver
     {
         [Test]
-        public void Verify_Login_with_Valid_Crendential()
+        public void Verify_Login_Functionality()
         {
-            LoginPageObject Login = new LoginPageObject(_driver);
-            Thread.Sleep(2000);
-            Login.LoginToSauceDemo("visual_user", "secret_sauce");
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
+            
+            LoginPageObject LoginPage = new LoginPageObject(_driver);
+            AddToCartPageObject AddToCartPage = new AddToCartPageObject(_driver);
+
+            StringFormatter.PrintMessage("Verify Login functionality with valid credential");
+            LoginPage.LoginToSauceDemo("visual_user", "secret_sauce");
+            /*WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
             IWebElement element = wait.Until(SeleniumExtras
                 .WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div[text()='Swag Labs']")));
-            Assert.IsTrue(element.Displayed);
-            Console.WriteLine("'Swag Labs' text is visible");
+            Assert.IsTrue(element.Displayed);*/
+            Thread.Sleep(2000);
+            AddToCartPage.IsHeaderPresentAfterSuccessfulLogin("Swag Labs").ShouldBeTrue("'Swag Labs' must be present after successful login");
+            //Console.WriteLine("'Swag Labs' text is visible");
         }
     }
 }

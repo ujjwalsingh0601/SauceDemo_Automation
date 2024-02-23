@@ -26,7 +26,6 @@ namespace SauceDemo.PageObjectModel.Drivers
         public void CleanUp()
         {
             _driver.Quit();
-            _driver.Close();
         }
     }
 }
