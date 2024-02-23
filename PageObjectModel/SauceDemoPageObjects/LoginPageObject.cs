@@ -47,6 +47,7 @@ namespace SauceDemo.PageObjectModel.SauceDemoPageObjects
             _username.SendKeys(username);
             _password.SendKeys(password);
             _loginBtn.Click();
+            Console.WriteLine("Login successfully to SauceDemo site");
         }
 
         /* public bool IsDashboardTextPresentAfterLogin(string text)

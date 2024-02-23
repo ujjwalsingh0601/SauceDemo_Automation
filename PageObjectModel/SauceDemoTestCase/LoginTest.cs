@@ -18,7 +18,7 @@ namespace SauceDemo.PageObjectModel.SauceDemoTestCase
             LoginPageObject Login = new LoginPageObject(_driver);
             Thread.Sleep(2000);
             Login.LoginToSauceDemo("visual_user", "secret_sauce");
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
             IWebElement element = wait.Until(SeleniumExtras
                 .WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div[text()='Swag Labs']")));
             Assert.IsTrue(element.Displayed);

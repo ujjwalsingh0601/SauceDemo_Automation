@@ -107,3 +107,4 @@ C:\Users\ASus\source\repos\SauceDemo\SauceDemo\obj\Debug\net8.0\refint\SauceDemo
 C:\Users\ASus\source\repos\SauceDemo\SauceDemo\obj\Debug\net8.0\SauceDemo.pdb
 C:\Users\ASus\source\repos\SauceDemo\SauceDemo\obj\Debug\net8.0\SauceDemo.genruntimeconfig.cache
 C:\Users\ASus\source\repos\SauceDemo\SauceDemo\obj\Debug\net8.0\ref\SauceDemo.dll
+C:\Users\ASus\source\repos\SauceDemo\SauceDemo\obj\Debug\net8.0\SauceDemo.sourcelink.json

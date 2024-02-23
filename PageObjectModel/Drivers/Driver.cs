@@ -25,8 +25,8 @@ namespace SauceDemo.PageObjectModel.Drivers
         [TearDown]
         public void CleanUp()
         {
-            _driver.Quit();
-            _driver.Close();
+            /*_driver.Quit();
+            _driver.Close();*/
         }
     }
 }
