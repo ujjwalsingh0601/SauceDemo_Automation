@@ -12,7 +12,6 @@ namespace SauceDemo.PageObjectModel.Drivers
 {
     public class Driver
     {
-        [ThreadStatic]
         public IWebDriver _driver;
         [SetUp]
         public void Setup()

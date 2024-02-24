@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace SauceDemo.PageObjectModel.SauceDemoTestCase
 {
-    //[Parallelizable(ParallelScope.All)]
     public class AddToCartTest : Driver
     {
         [Test]

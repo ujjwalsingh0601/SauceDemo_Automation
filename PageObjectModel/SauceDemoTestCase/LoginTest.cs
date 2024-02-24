@@ -11,7 +11,6 @@ using SauceDemo.PageObjectModel.CustomCommands;
 
 namespace SauceDemo.PageObjectModel.SauceDemoTestCase
 {
-    [Parallelizable(ParallelScope.All)]
     public class LoginTest : Driver
     {
         [Test]
