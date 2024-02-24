@@ -8,18 +8,6 @@ namespace SauceDemo.PageObjectModel.CustomCommands
 {
     public static class AssertionLists
     {
-        /*public static void ShouldBeTrue(this bool condition, string message) // = null removed
-        {
-            Assert.IsTrue(condition, message);
-            Console.WriteLine(message);
-        }*/
-
-        /*public static void ShouldBeFalse(this bool condition, string message)
-        {
-            Assert.IsFalse(condition, message);
-            Console.WriteLine(message);
-        }*/
-
         public static void ShouldBeTrue(this bool actual, string message)
         {
             Assert.IsTrue(actual, $"{message} expected true: actual {actual}");
@@ -31,16 +19,11 @@ namespace SauceDemo.PageObjectModel.CustomCommands
             Assert.IsFalse(actual, $"{message} expected false: actual {actual}");
             Console.WriteLine($"{message} expected false: actual {actual}");
         }
-
-
-        public static void ShouldBeEqual<T>(this T actual, T expected, string message)// = null removed
+        public static void ShouldBeEqual<T>(this T actual, T expected, string message)
         {
-            Assert.AreEqual(expected, actual, message);
+            Assert.AreEqual(expected, actual, $"{message} expected: {expected}, actual: {actual}");
+            Console.WriteLine($"{message} expected: {expected}, actual: {actual}");
         }
-        public static void ShouldBeEqual(this string actual, string expected, string message = null)
-        {
-            Assert.AreEqual(expected, actual, message);
-        }
-       
+
     }
 }

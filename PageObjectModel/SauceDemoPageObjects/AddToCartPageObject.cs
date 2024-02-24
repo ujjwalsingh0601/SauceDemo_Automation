@@ -1,7 +1,9 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SauceDemo.PageObjectModel.Drivers;
 using SauceDemo.PageObjectModel.SauceDemoTestCase;
 using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,32 +16,27 @@ namespace SauceDemo.PageObjectModel.SauceDemoPageObjects
     {
         public IWebDriver _driver;
 
-        [FindsBy(How = How.XPath, Using = AddToCardByXpath)]
-        private IWebElement _AddToCardBtn;
-        [FindsBy(How = How.Id, Using = ShoppingCartIconById)]
-        private IWebElement _ShoppingCartIcon;
-        [FindsBy(How = How.XPath, Using = ProductAddedToCartByXpath)]
-        private IWebElement _ProductAddedToCart;
-        [FindsBy(How = How.XPath, Using = RemoveProductFromCartByXpath)]
-        private IWebElement _RemoveProductFromCart;
-
-        [FindsBy(How = How.XPath, Using = HeaderLabelInCartPageByXpath)]
-        private IWebElement _HeaderLabelInCartPage;
-
         #region Locators for Add to Cart Page
-        //public const string AddToCardByXpath = "//button[@id='add-to-cart-sauce-labs-backpack']";
-        //public const string AddToCardByXpath = "//button[@id='{0}']"; 
+
         public const string AddToCardByXpath = "//div[text()='{0}']/../../../div[2]/button";
 
         public const string ShoppingCartIconById = "shopping_cart_container";
 
         public const string ProductAddedToCartByXpath = "//div[text()='{0}']";
-        //public const string ProductAddedToCartByXpath= "//div[text()='Sauce Labs Backpack']";
 
-        //public const string RemoveProductFromCartByXpath = "//button[text()='Remove']";
         public const string RemoveProductFromCartByXpath = "//div[text()='{0}']/../../div[2]/button";
 
-        public const string HeaderLabelInCartPageByXpath = "//div[@class='header_label']/div[text()='{0}']";
+        public const string AppLogoInCartPageByXpath = "//div[@class='header_label']/div[text()='{0}']";
+
+        public const string AddedProductCountByXpath = "//div[@id='shopping_cart_container']/a/span";
+
+        public const string ProductPriceByXpath = "//div[@class='inventory_item_price']";
+
+        public const string ProductSortingIconByXpath =  "//select[@class='product_sort_container']";
+
+        public const string ProductSortingOptionsByXpath = "//select[@class='product_sort_container']/option[text()='{0}']";
+
+        public const string ContinueShoppingButtonByXpath = "//button[@id='continue-shopping']";
 
         #endregion
 
@@ -48,37 +45,34 @@ namespace SauceDemo.PageObjectModel.SauceDemoPageObjects
             _driver = driver;
             PageFactory.InitElements(driver, this);
         }
-
-       /* public void AddToCart()
+        public void NavigateToAddToCartPage()
         {
             LoginPageObject Login = new LoginPageObject(_driver);
             Login.LoginToSauceDemo("visual_user", "secret_sauce");
-            *//*LoginTest LT = new LoginTest();
-            LT.Verify_Login_with_Valid_Crendential();*//*
-            _AddToCardBtn.Click();
-        }*/
-       
-        public void AddProductToCart(string productname)
-        {
-            LoginPageObject Login = new LoginPageObject(_driver);
-            Login.LoginToSauceDemo("visual_user", "secret_sauce");
-            // Construct the dynamic XPath by formatting the template with the provided buttonId
-            string dynamicXPath = string.Format(AddToCardByXpath, productname);
-            _AddToCardBtn = _driver.FindElement(By.XPath(dynamicXPath));
-            _AddToCardBtn.Click();
-            Console.WriteLine($"{productname} has been added to cart");
+            Console.WriteLine("User is navigated to AddToCart Page");
         }
-        public void ViewShoppingCartList()
+        public void ClickOnAddToCartButton(string productname)
         {
-            _ShoppingCartIcon.Click();
+            string dynamicXPath = string.Format(AddToCardByXpath, productname);
+            var addToCartButton = _driver.FindElement(By.XPath(dynamicXPath));
+            // Wait for the button to be clickable
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(addToCartButton));
+
+            addToCartButton.Click();
+            Console.WriteLine($"Clicked on 'Add to cart' for '{productname}'");
+        }
+        public void ClickOnMyCartIcon()
+        {
+            _driver.FindElement(By.Id(ShoppingCartIconById)).Click();
             Console.WriteLine("User is redirected to product list that has been added into Cart");
         }
 
         public bool IsProductAddedToCart(string productname)
         {
             string dynamicXPath = string.Format(ProductAddedToCartByXpath, productname);
-            _ProductAddedToCart = _driver.FindElement(By.XPath(dynamicXPath));
-            if (_ProductAddedToCart != null)
+            _driver.FindElement(By.XPath(dynamicXPath));
+            if (_driver.FindElement(By.XPath(dynamicXPath)) != null)
             {
                 return true;
             }
@@ -90,22 +84,23 @@ namespace SauceDemo.PageObjectModel.SauceDemoPageObjects
         public bool IsProductPresentInTheCart(string productname)
         {
             string dynamicXPath = string.Format(ProductAddedToCartByXpath, productname);
-            _ProductAddedToCart = _driver.FindElement(By.XPath(dynamicXPath));
-            if (_ProductAddedToCart != null)
+            try
             {
+                _driver.FindElement(By.XPath(dynamicXPath));
                 return true;
             }
-            else
+            catch (NoSuchElementException)
             {
                 return false;
             }
         }
 
-        public bool IsHeaderPresentAfterSuccessfulLogin(string text)
+
+        public bool IsAppLogoPresentAfterSuccessfulLogin(string text)
         {
-            string dynamicXPath = string.Format(HeaderLabelInCartPageByXpath, text);
-            _HeaderLabelInCartPage = _driver.FindElement(By.XPath(dynamicXPath));
-            if (_HeaderLabelInCartPage != null)
+            string dynamicXPath = string.Format(AppLogoInCartPageByXpath, text);
+            _driver.FindElement(By.XPath(dynamicXPath));
+            if (_driver.FindElement(By.XPath(dynamicXPath)) != null)
             {
                 return true;
             }
@@ -114,13 +109,41 @@ namespace SauceDemo.PageObjectModel.SauceDemoPageObjects
                 return false;
             }
         }
-        public void RemoveProductFromCart(string productname)
+        public string GetNumberOfAddedProductFromCartIcon()
+        {
+             return _driver.FindElement(By.XPath(AddedProductCountByXpath)).Text;
+        }
+        public void ClickOnRemoveButton(string productname)
         {
             string dynamicXPath = string.Format(RemoveProductFromCartByXpath, productname);
-            _RemoveProductFromCart = _driver.FindElement(By.XPath(dynamicXPath));
-            _RemoveProductFromCart.Click();
-            Console.WriteLine($"{productname} Removed from Cart");
+            _driver.FindElement(By.XPath(dynamicXPath)).Click();
+            Console.WriteLine($"Click on 'Remove' buttton for '{productname}' from the list");
+        }
+        public void ClickOnContinueShoppingButton()
+        {
+            _driver.FindElement(By.XPath(ContinueShoppingButtonByXpath)).Click();
+            Console.WriteLine("Click on ContinueShopping");
         }
 
+        public List<string> GetProductPrices()
+        {
+            var priceList = _driver.FindElements(By.XPath(ProductPriceByXpath));
+            return priceList.Select(price => price.Text.Replace("$", "")).ToList();
+        }
+
+
+        public void ClickOnProductSortingIcon()
+        {
+            _driver.FindElement(By.XPath(ProductSortingIconByXpath)).Click();
+            Console.WriteLine("Click on product sorting icon");
+        }
+
+        public void ClickOnProductSortingOption(string option)
+        {
+            string dynamicXpath = string.Format(ProductSortingOptionsByXpath, option);
+             _driver.FindElement(By.XPath(dynamicXpath)).Click();
+            Console.WriteLine($"Click on product sorting option '{option}'");
+
+        }
     }
 }

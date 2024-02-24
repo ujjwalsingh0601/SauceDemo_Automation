@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SauceDemo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3e17f6e8fb2d01687a559819692ff30ee9f72b6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+51674be49337b633e9de161d084f9493c62255ee")]
 [assembly: System.Reflection.AssemblyProductAttribute("SauceDemo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SauceDemo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

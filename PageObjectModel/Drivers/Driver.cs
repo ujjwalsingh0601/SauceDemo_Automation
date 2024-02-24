@@ -12,6 +12,7 @@ namespace SauceDemo.PageObjectModel.Drivers
 {
     public class Driver
     {
+        [ThreadStatic]
         public IWebDriver _driver;
         [SetUp]
         public void Setup()
@@ -25,7 +26,7 @@ namespace SauceDemo.PageObjectModel.Drivers
         [TearDown]
         public void CleanUp()
         {
-            _driver.Quit();
+            _driver.Close();
         }
     }
 }

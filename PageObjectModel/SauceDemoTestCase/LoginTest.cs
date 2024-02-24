@@ -11,24 +11,35 @@ using SauceDemo.PageObjectModel.CustomCommands;
 
 namespace SauceDemo.PageObjectModel.SauceDemoTestCase
 {
+    [Parallelizable(ParallelScope.All)]
     public class LoginTest : Driver
     {
         [Test]
-        public void Verify_Login_Functionality()
+        public void Verify_Login_Functionality_With_Valid_Invalid_Credential()
         {
-            
+            List<string> ValidCredential = new List<string> { "visual_user", "secret_sauce" };
+            List<string> InvalidCredential = new List<string> { "test", "test" };
+
             LoginPageObject LoginPage = new LoginPageObject(_driver);
             AddToCartPageObject AddToCartPage = new AddToCartPageObject(_driver);
+            PageUtils pageUtils = new PageUtils(_driver);
 
-            StringFormatter.PrintMessage("Verify Login functionality with valid credential");
-            LoginPage.LoginToSauceDemo("visual_user", "secret_sauce");
-            /*WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(2));
-            IWebElement element = wait.Until(SeleniumExtras
-                .WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//div[text()='Swag Labs']")));
-            Assert.IsTrue(element.Displayed);*/
-            Thread.Sleep(2000);
-            AddToCartPage.IsHeaderPresentAfterSuccessfulLogin("Swag Labs").ShouldBeTrue("'Swag Labs' must be present after successful login");
-            //Console.WriteLine("'Swag Labs' text is visible");
+            // Print a message indicating the test scenario
+            StringFormatter.PrintMessage("Verification of Login functionality with invalid credential");
+            //Login with invalid credential
+            LoginPage.LoginToSauceDemo(InvalidCredential[0], InvalidCredential[1]);
+            //Assert whether login error message is shown for invalid credential
+            LoginPage.IsLoginErrorMessagePresent().ShouldBeTrue("Invalid Login error message must be present");
+
+            // Print a message indicating the test scenario
+            StringFormatter.PrintMessage("Verification of Login functionality with valid credential");
+            //Reload the page inorder to reset the default state of the page
+            pageUtils.ReloadPage();
+            //Login with valid credential
+            LoginPage.LoginToSauceDemo(ValidCredential[0], ValidCredential[1]);
+            //Assert whether login is successful by verifying App logo 'Swag Labs' is present in the product page
+            AddToCartPage.IsAppLogoPresentAfterSuccessfulLogin("Swag Labs")
+                .ShouldBeTrue("'Swag Labs' title must be present to confirm that login is successful");
         }
     }
 }
